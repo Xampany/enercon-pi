@@ -1,14 +1,25 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Led } from '../model/led';
 
 @Component({
   selector: 'pi-led',
   templateUrl: './led.component.html',
-  styleUrls: ['./led.component.css']
+  styleUrls: ['./led.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LedComponent implements OnInit {
   @Input()
   led: Led;
+
+  @Output()
+  ledChange = new EventEmitter<number>();
 
   constructor() {}
 
@@ -16,7 +27,7 @@ export class LedComponent implements OnInit {
 
   handleClick(ev: MouseEvent) {
     if (ev.ctrlKey) {
-      console.log('clicked');
+      this.ledChange.emit(this.led.index);
     }
   }
 }

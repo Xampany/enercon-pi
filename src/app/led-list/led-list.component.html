@@ -1,0 +1,12 @@
+<p>
+  led-list works!
+</p>
+<table class="table">
+  <tbody>
+    <tr>
+      <td *ngFor="let l of leds">
+        <pi-led [led]="l" (ledChange)="handleLedChange($event)"></pi-led>
+      </td>
+    </tr>
+  </tbody>
+</table>
