@@ -1,0 +1,7 @@
+<pi-led [led]="led" *ngIf="led; else loader"></pi-led>
+
+<ng-template #loader>
+  <p>
+    I am loading, loading, loading ...
+  </p>
+</ng-template>

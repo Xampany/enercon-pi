@@ -1,0 +1,9 @@
+<div class="columns">
+  <div class="column is-one-fourth">
+    <pi-color-form></pi-color-form>
+  </div>
+  <div class="column">
+    <pi-led-list #list></pi-led-list>
+    <pi-action-bar (refresh)="list.ngOnInit()"></pi-action-bar>
+  </div>
+</div>

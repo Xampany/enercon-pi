@@ -1,11 +1,23 @@
 import { Injectable, Inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Led } from '../model/led';
 import { HttpClient } from '@angular/common/http';
-import { tap, map } from 'rxjs/operators';
+import { tap, map, catchError } from 'rxjs/operators';
 
+// https://stackblitz.com/edit/enercon-ws
 @Injectable()
 export class ColorService {
+  private readonly colors = [
+    'red',
+    'green',
+    'blue',
+    'cyan',
+    'magenta',
+    'yellow',
+    'white',
+    'black'
+  ];
+
   constructor(
     private readonly client: HttpClient,
     @Inject('URL') private readonly url: string
@@ -32,7 +44,8 @@ export class ColorService {
     const colors$ = this.client.get<string[]>(this.url + '/colors');
     return colors$.pipe(
       tap(value => console.log(value)),
-      map(this.parseColors)
+      map(this.parseColors),
+      catchError(() => of(this.parseColors(this.colors)))
     );
   }
 

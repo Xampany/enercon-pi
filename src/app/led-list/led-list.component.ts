@@ -1,24 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { Led } from '../model/led';
 import { ColorService } from '../shared/color.service';
-import { timer } from 'rxjs';
-import { tap, switchMap } from 'rxjs/operators';
+import { timer, Subscription, Observable } from 'rxjs';
+import { tap, switchMap, takeUntil, take } from 'rxjs/operators';
 
 @Component({
   selector: 'pi-led-list',
   templateUrl: './led-list.component.html',
   styleUrls: ['./led-list.component.css']
 })
-export class LedListComponent implements OnInit {
+export class LedListComponent implements OnInit, OnDestroy {
   leds: Led[];
+
+  leds$: Observable<Led[]>;
+
+  private sub: Subscription;
+
+  private destroy$ = new EventEmitter<void>();
 
   constructor(private readonly service: ColorService) {}
 
   ngOnInit() {
-    timer(2000, 5000)
+    this.leds$ = this.service.readLeds();
+
+    this.sub = timer(2000, 5000)
       .pipe(
         tap(v => console.log(v)),
-        switchMap(() => this.service.readLeds())
+        switchMap(() => this.service.readLeds()),
+        takeUntil(this.destroy$),
+        take(2)
       )
       .subscribe({
         next: res => {
@@ -28,6 +38,17 @@ export class LedListComponent implements OnInit {
       });
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    // if (this.sub) {
+    //   this.sub.unsubscribe();
+    // }
+  }
+
+  /**
+   *
+   * @param index The 0 based index of the led
+   */
   handleLedChange(index: number) {
     this.service.updateLed(index).subscribe({
       next: color => {

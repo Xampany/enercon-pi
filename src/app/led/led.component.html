@@ -6,3 +6,8 @@
   [style.backgroundColor]="led?.color"
   class="box"
 ></div>
+<ng-content select="a"></ng-content>
+<p>
+  {{ led?.color | piColor: 'hex' }}
+</p>
+<pre hidden><code>{{ led | json }}</code></pre>
