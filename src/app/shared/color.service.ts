@@ -4,6 +4,7 @@ import { Led } from '../model/led';
 import { HttpClient } from '@angular/common/http';
 import { tap, map, catchError } from 'rxjs/operators';
 import { COLORS } from './colors';
+import * as tinycolor from 'tinycolor2';
 
 // https://stackblitz.com/edit/enercon-ws
 @Injectable()
@@ -19,13 +20,21 @@ export class ColorService {
    * @param index The 0 based index
    * @param color The color
    */
-  updateLed(index: number, color = 'goldenrod') {
+  updateLed(
+    index: number,
+    color = tinycolor.random().toString()
+  ): Observable<string> {
     const body = { color };
     const color$ = this.client.put(this.url + '/colors/' + index, body, {
       responseType: 'text'
     });
-    // TODO add proper datatype
-    return color$.pipe(tap(res => console.log(res)));
+    return color$.pipe(
+      tap(value => console.log(value)),
+      catchError(() => {
+        this.colors[index] = color;
+        return of(color);
+      })
+    );
   }
 
   /**
