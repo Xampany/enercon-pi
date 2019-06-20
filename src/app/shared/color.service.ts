@@ -3,24 +3,15 @@ import { Observable, of } from 'rxjs';
 import { Led } from '../model/led';
 import { HttpClient } from '@angular/common/http';
 import { tap, map, catchError } from 'rxjs/operators';
+import { COLORS } from './colors';
 
 // https://stackblitz.com/edit/enercon-ws
 @Injectable()
 export class ColorService {
-  private readonly colors = [
-    'red',
-    'green',
-    'blue',
-    'cyan',
-    'magenta',
-    'yellow',
-    'white',
-    'black'
-  ];
-
   constructor(
     private readonly client: HttpClient,
-    @Inject('URL') private readonly url: string
+    @Inject('URL') private readonly url: string,
+    @Inject(COLORS) private readonly colors: string[]
   ) {}
 
   /**
