@@ -13,6 +13,7 @@ import { ActionBarComponent } from './action-bar/action-bar.component';
 import { ColorFormComponent } from './color-form/color-form.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DetailComponent } from './detail/detail.component';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { DetailComponent } from './detail/detail.component';
     ActionBarComponent,
     ColorFormComponent,
     DashboardComponent,
-    DetailComponent
+    DetailComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Led } from '../model/led';
 import { ColorService } from '../shared/color.service';
-import { map } from 'rxjs/operators';
+import { map, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'pi-detail',
@@ -24,7 +24,10 @@ export class DetailComponent implements OnInit {
 
     this.service
       .readLeds()
-      .pipe(map(leds => leds[index]))
+      .pipe(
+        delay(10e3),
+        map(leds => leds[index])
+      )
       .subscribe({
         next: led => (this.led = led)
       });
